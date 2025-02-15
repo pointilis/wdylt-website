@@ -1,1 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+
+@use "tailwindcss";
+@use 'ckeditor5/ckeditor5.css';
+
+:root {
+  --leading-normal: normal;
+}
+
+@layer base {
+  ul, ol {
+    list-style: revert;
+    margin: revert;
+    padding: revert;
+  }
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+h1,
+h2,
+h3 {
+  font-family: "Grandstander", serif;
+}
+
+.newsreader-font {
+  font-family: "Newsreader", serif;
+  font-optical-sizing: auto;
+}

@@ -1,0 +1,15 @@
+<ng-container *ngIf="user$ | async as user">
+    @if(user.status == 'success') {
+        <div class="flex items-center gap-2">
+            <span><img [src]="user?.data?.photoURL" class="rounded-full w-8 h-8"></span>
+            <span>Welcome back, <strong>{{ user.data?.displayName }}</strong></span>
+        </div>
+    } @else {
+        <button type="button" mat-raised-button (click)="onSignIn()">
+            <span class="flex items-center gap-2">
+                <mat-icon fontIcon="manage_accounts"></mat-icon>
+                My Account
+            </span>
+        </button>
+    }
+</ng-container>

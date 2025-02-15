@@ -1,0 +1,36 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { HomeScreenComponent } from './screens/home-screen/home-screen.component';
+import { DashboardScreenComponent } from './screens/dashboard-screen/dashboard-screen.component';
+import { WriteScreenComponent } from './screens/write-screen/write-screen.component';
+import { RecordScreenComponent } from './screens/record-screen/record-screen.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: HomeScreenComponent,
+  },
+  {
+    path: 'dashboard',
+    children: [
+      {
+        path: '',
+        component: DashboardScreenComponent,
+      },
+      {
+        path: 'write',
+        component: WriteScreenComponent,
+      },
+      {
+        path: 'record',
+        component: RecordScreenComponent,
+      }
+    ]
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class LearnRoutingModule { }

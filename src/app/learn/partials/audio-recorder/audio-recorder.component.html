@@ -1,0 +1,70 @@
+
+<div class="w-2xs">
+    <div class="bg-neutral-200 p-3 rounded-xl">
+        <div class="bg-neutral-50 p-6 rounded-lg mb-2">
+            <div class="flex gap-4 justify-center">
+                <div>
+                    <span class="text-5xl">{{ duration().minutes }}</span>
+                    <span class="text-xl">m</span>
+                </div>
+
+                <div>
+                    <span class="text-5xl">{{ duration().seconds }}</span>
+                    <span class="text-xl">s</span>
+                </div>
+            </div>
+        </div>
+
+        <div 
+            id="mic" 
+            class="h-0 w-full bg-neutral-50 mb-6 rounded-lg"
+            [ngClass]="{'h-auto': isRecording()}"
+            [ngStyle]="{'visibility': isRecording() ? 'visible' : 'hidden'}"
+        ></div>
+
+        <div class="grid grid-cols-2 gap-4 w-full">
+            <button 
+                type="button" 
+                mat-raised-button 
+                (click)="onStartRecordHandler()"
+                class="w-full flex"
+            >   
+                <ng-container *ngIf="!isRecording() else recorded">
+                    <span class="flex items-center">
+                        <mat-icon fontIcon="play_arrow"></mat-icon>
+                        <span class="ml-2">Start</span>
+                    </span>
+                </ng-container>
+
+                <ng-template #recorded>
+                    <span class="flex items-center">
+                        <mat-icon fontIcon="stop"></mat-icon>
+                        <span class="ml-2">Stop</span>
+                    </span>
+                </ng-template>
+            </button>
+
+            <button 
+                type="button" 
+                mat-raised-button 
+                (click)="onPauseHandler()"
+                [disabled]="!isRecording()"
+                class="w-full flex"
+            >   
+                <ng-container *ngIf="!isPaused() else played">
+                    <span class="flex items-center">
+                        <mat-icon fontIcon="pause"></mat-icon>
+                        <span class="ml-2">Pause</span>
+                    </span>
+                </ng-container>
+
+                <ng-template #played>
+                    <span class="flex items-center">
+                        <mat-icon fontIcon="play_arrow"></mat-icon>
+                        <span class="ml-2">Resume</span>
+                    </span>
+                </ng-template>
+            </button>
+        </div>
+    </div>
+</div>

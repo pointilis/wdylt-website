@@ -1,0 +1,32 @@
+<section class="lg:h-full lg:flex flex-col px-8 py-12">
+    <div class="w-auto lg:w-4xl xl:w-3xl mx-auto">
+        <div class="block w-full md:w-5/5">
+            <dashboard-logo></dashboard-logo>
+        </div>
+
+        <div class="flex items-center mt-5">
+            <div>
+                <back-button></back-button>
+            </div>
+
+            <div class="text-base md:text-xl pl-3 text-neutral-700 !leading-normal">
+                Write before your brain sleeps!
+            </div>
+
+            <div class="ml-auto">
+                <button mat-raised-button class="flex items-center">
+                    <mat-icon fontIcon="save"></mat-icon>
+                    <span class="ml-1">Save</span>
+                </button>
+            </div>
+        </div>
+    
+        <div class="block mt-5">
+            <write-ckeditor></write-ckeditor>
+        </div>
+    </div>
+
+    <div class="pt-7 pb-5 lg:mt-auto text-center text-neutral-700">
+        &copy; 2025 what did you learn today (wdylt)
+    </div>
+</section>

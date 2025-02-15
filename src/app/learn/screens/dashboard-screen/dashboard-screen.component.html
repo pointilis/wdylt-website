@@ -1,0 +1,64 @@
+<section class="lg:h-full lg:flex flex-col items-center justify-center px-8 py-12">
+    <div class="w-auto lg:w-4xl xl:w-3xl mx-auto">
+        <div class="block sm:flex flex-wrap sm:flex-nowrap gap-4">
+            <div class="block w-full md:w-5/5">
+                <dashboard-logo></dashboard-logo>
+            </div>
+
+            <div class="block w-full md:w-3/5 flex flex-col lg:items-end mt-4 sm:mt-0 pt-4 sm:pt-0 border-t sm:border-0 border-neutral-200">
+                <div class="sm:ml-auto">
+                    <div class="mb-3 sm:mb-6">
+                        <my-account-button></my-account-button>
+                    </div>
+  
+                    <div class="flex gap-3">
+                        <div>
+                            <button mat-raised-button class="w-32" [routerLink]="['/dashboard/record']">
+                                <span class="flex items-center gap-1 justify-center">
+                                    <mat-icon fontIcon="mic"></mat-icon>
+                                    <span>Record</span>
+                                </span>
+                            </button>
+                        </div>
+
+                        <div>
+                            <button mat-raised-button class="w-32" [routerLink]="['/dashboard/write']">
+                                <span class="flex items-center gap-1 justify-center">
+                                    <mat-icon fontIcon="draw"></mat-icon>
+                                    <span>Write</span>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="block w-full flex items-center mt-6">
+            <div>
+                <div class="hidden">
+                    <mat-date-range-input [rangePicker]="picker" [formGroup]="range">
+                        <input matStartDate formControlName="start" placeholder="Start date">
+                        <input matEndDate formControlName="end" placeholder="End date">
+                    </mat-date-range-input>
+                </div>
+
+                <mat-date-range-picker touchUi #picker></mat-date-range-picker>
+
+                <button mat-raised-button (click)="picker.open()">
+                    <mat-icon fontIcon="calendar_month"></mat-icon>
+                    <span>My Calendar</span>
+                </button>
+            </div>
+
+            <div>
+                <p>Selected range: {{range.value | json}}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="pt-7 pb-5 lg:mt-auto text-center text-neutral-700">
+        &copy; 2025 what did you learn today (wdylt)
+    </div>
+</section>
+

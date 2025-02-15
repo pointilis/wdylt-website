@@ -1,0 +1,79 @@
+<section class="lg:h-screen lg:flex flex-col items-center justify-center px-8 py-12">
+    <div class="w-auto lg:w-4xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-4">
+            <div class="block">
+                <h1 class="relative -mt-6">
+                    <span class="block text-6xl lg:text-8xl font-bold text-[#1982c4] !leading-normal">What 💭</span> 
+                    <span class="block text-3xl lg:text-5xl font-bold text-[#6a4c93] !leading-normal">Did <span class="text-[#ffca3a]">You</span></span>
+                    <span class="block text-3xl lg:text-5xl font-bold text-[#8ac926] !leading-normal"><span class="text-4xl lg:text-6xl font-semibold text-[#ff595e]">Learn</span> Today?</span>
+                </h1>
+
+                <div class="mt-3">
+                    <div *ngIf="!(isLoggedIn$ | async) else dashboardButton" class="w-full flex gap-3 mt-5">
+                        <div>
+                            <button mat-raised-button class="w-32" [routerLink]="['/dashboard/record']">
+                                <span class="flex items-center gap-1 justify-center">
+                                    <mat-icon fontIcon="mic"></mat-icon>
+                                    <span>Record</span>
+                                </span>
+                            </button>
+                        </div>
+
+                        <div>
+                            <button mat-raised-button class="w-32" [routerLink]="['/dashboard/write']">
+                                <span class="flex items-center gap-1 justify-center">
+                                    <mat-icon fontIcon="draw"></mat-icon>
+                                    <span>Write</span>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <ng-template #dashboardButton>
+                    <div>
+                        <button mat-raised-button [routerLink]="['/dashboard']">
+                            <span class="flex items-center gap-1 justify-center">
+                                <mat-icon fontIcon="dashboard_customize"></mat-icon>
+                                <span>My Dashboard</span>
+                            </span>
+                        </button>
+                    </div>
+                </ng-template>
+            </div>
+
+            <div class="block text-neutral-700">
+                <div class="mb-6">
+                    <my-account-button></my-account-button>
+                </div>
+
+                <h2 class="text-2xl lg:text-3xl font-bold">
+                    🧠 Neuroscience Says Your Brain Is Built to Forget Things!
+                    👉🏽 <a href="https://www.cell.com/cell-reports/fulltext/S2211-1247(23)01010-0" target="_blank" class="inline-block text-base font-normal italic text-blue-600 underline">
+                        <span class="flex items-center gap-1">
+                            read study here 
+                            <mat-icon aria-hidden="false" fontIcon="open_in_new">open_in_new</mat-icon>
+                        </span>
+                    </a>
+                </h2>
+                <div class="text-xl block mt-3 text-right">Do you still remember what you learned last year, last week, or even yesterday maybe? 🤔</div>
+            </div>
+        </div>
+
+        <div class="border-t border-neutral-200 my-6 w-full"></div>
+
+        <div class="block text-lg lg:text-2xl mb-8 lg:mb-4 newsreader-font">
+            <u>Simple ways to keep remembering what you learned</u> day by day and can be done with anyone 🚀 are to save it as a simple note.
+            The platform <strong>What Did You Learn Today?</strong> 💭 helps you save notes on the secure and private cloud 🌨️. So you can access it on your own from anywhere 🌋 for free.
+        </div>
+
+        <div class="block text-lg lg:text-2xl mb-8 lg:mb-12 newsreader-font">
+            Today we live in the AI ✨ era, so... premium features 💰 helps to analyze what you learn with AI and get to know what the next step is to achieve your goal 🎉 in an efficient way.
+        </div>
+    </div>
+
+    <div class="mt-7 lg:mt-auto text-center text-neutral-700">
+        &copy; 2025 what did you learn today (wdylt)
+    </div>
+</section>
+
