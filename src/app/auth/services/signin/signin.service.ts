@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Auth, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, from, Observable, of, throwError } from 'rxjs';
 import { IUser } from '../../auth.model';
 
 @Injectable({
@@ -9,10 +9,7 @@ import { IUser } from '../../auth.model';
 export class SigninService {
 
   private readonly auth = inject(Auth);
-  private readonly user: BehaviorSubject<{
-    data: IUser | null,
-    error: unknown,
-  }> = new BehaviorSubject<{
+  private readonly user: BehaviorSubject<{ data: IUser | null, error: unknown }> = new BehaviorSubject<{
     data: IUser | null,
     error: unknown,
   }>({ data: null, error: null });
@@ -22,7 +19,7 @@ export class SigninService {
   /**
    * Use Google Account.
    */
-  public withGoogle() {
+  async withGoogle() {
     const provider = new GoogleAuthProvider();
     // Label: See and download your contacts
     // Desc: We want to see your name for internal used only, not shared to others
@@ -36,13 +33,22 @@ export class SigninService {
     });
 
     this.auth.useDeviceLanguage();
+    return await signInWithPopup(this.auth, provider);
+  }
 
-    signInWithPopup(this.auth, provider)
-      .then((result) => {
-        console.log(result);
-      }).catch((error) => {
-        console.log(error);
-      });
+  signIn(): Observable<any> {
+    const withGoogle = this.withGoogle();
+    return new Observable(observer => {
+      try {
+        withGoogle.then(value => {
+          if (value && value.user) {
+            observer.next(Object.freeze(value.user));
+          }
+        });
+      } catch(error) {
+        observer.error(error);
+      }
+    });
   }
 
   /**
@@ -94,6 +100,19 @@ export class SigninService {
         }
       });
     })
+  }
+
+  /**
+   * Signout
+   */
+  signOut(): Observable<any> {
+    const observable$ = new Observable(observer => {
+      this.auth.signOut()
+        .then(() => observer.next(true))
+        .catch((error) => observer.error(error));
+    })
+    
+    return observable$;
   }
 
 }

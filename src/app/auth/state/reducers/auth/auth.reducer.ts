@@ -57,6 +57,63 @@ export const AuthReducer = createReducer(
         status: Statuses.FAILURE,
       }
     }
-  })
+  }),
+
+
+  // ...
+  // SIGNIN SUCCESS
+  // ...
+  on(AuthActions.signIn, (state) => {
+    return {
+      ...state,
+      user: {
+        ...state.user,
+        status: Statuses.LOADING,
+        error: null,
+      }
+    }
+  }),
+  on(AuthActions.signInSuccess, (state, { data }) => {
+    return {
+      ...state,
+      user: {
+        ...state.user,
+        data: data,
+        error: null,
+        status: Statuses.SUCCESS,
+      }
+    }
+  }),
+  on(AuthActions.signInFailure, (state, { error }) => {
+    return {
+      ...state,
+      user: {
+        ...state.user,
+        error: error,
+        status: Statuses.FAILURE,
+      }
+    }
+  }),
+
+
+  // ...
+  // SIGNOUT
+  // ...
+  on(AuthActions.signOutSuccess, (state) => {
+    return {
+      ...state,
+      user: initialState.user,
+    }
+  }),
+  on(AuthActions.signOutFailure, (state) => {
+    return {
+      ...state,
+      user: {
+        ...state.user,
+      }
+    }
+  }),
+
+
 );
 

@@ -8,6 +8,7 @@ import { AuthState } from '../../state/reducers/auth/auth.reducer';
 import * as AuthSelectors from '../../state/selectors/auth/auth.selectors';
 import { SigninService } from '../../services/signin/signin.service';
 import { AsyncPipe, NgIf } from '@angular/common';
+import { AuthActions } from '../../state/actions/auth/auth.actions';
 
 @Component({
   selector: 'my-account-button',
@@ -33,7 +34,11 @@ export class MyAccountButtonComponent {
   }
 
   onSignIn() {
-    this.signInService.withGoogle();
+    this.store.dispatch(AuthActions.signIn());
+  }
+
+  onLogout() {
+    this.store.dispatch(AuthActions.signOut());
   }
 
 }
