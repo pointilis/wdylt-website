@@ -4,6 +4,7 @@ import { HomeScreenComponent } from './screens/home-screen/home-screen.component
 import { DashboardScreenComponent } from './screens/dashboard-screen/dashboard-screen.component';
 import { WriteScreenComponent } from './screens/write-screen/write-screen.component';
 import { RecordScreenComponent } from './screens/record-screen/record-screen.component';
+import { AuthenticatedOnlyGuard } from '../auth/guards/authenticated-only.guard';
 
 const routes: Routes = [
   {
@@ -12,6 +13,7 @@ const routes: Routes = [
   },
   {
     path: 'dashboard',
+    canActivate: [AuthenticatedOnlyGuard],
     children: [
       {
         path: '',

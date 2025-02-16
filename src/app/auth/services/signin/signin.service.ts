@@ -103,6 +103,21 @@ export class SigninService {
   }
 
   /**
+   * Check is authenticated
+   */
+  async isAuthenticated(): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.auth.onAuthStateChanged(user => {
+        if (user) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      });
+    });
+  }
+
+  /**
    * Signout
    */
   signOut(): Observable<any> {
