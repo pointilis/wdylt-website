@@ -29,7 +29,7 @@ export const appConfig: ApplicationConfig = {
         appId: "1:928871794567:web:c9294dd68219e9214b7522",
         storageBucket: "wdylt-website.firebasestorage.app",
         apiKey: "AIzaSyDfg8iyDo-pnK1HK0-YIXn0gGckzERFkkk",
-        authDomain: "wdylt-website.firebaseapp.com",
+        authDomain: "wdylt.com",
         messagingSenderId: "928871794567",
     })),
     provideAuth(() => getAuth()),
