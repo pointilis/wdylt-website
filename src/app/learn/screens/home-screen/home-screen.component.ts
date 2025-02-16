@@ -2,12 +2,13 @@ import { Component, inject } from '@angular/core';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MyAccountButtonComponent } from '../../../auth/partials/my-account-button/my-account-button.component';
 import { RouterModule } from '@angular/router';
 import { Auth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
-import { IUser } from '../../../auth/auth.model';
 import { AsyncPipe, JsonPipe, NgIf } from '@angular/common';
+import { SigninButtonComponent } from '../../../shared/partials/signin-button/signin-button.component';
 
 @Component({
   selector: 'app-home-screen',
@@ -16,7 +17,9 @@ import { AsyncPipe, JsonPipe, NgIf } from '@angular/common';
     MatIconModule,
     MatIcon,
     MatButtonModule,
+    MatDialogModule,
     MyAccountButtonComponent,
+    SigninButtonComponent,
     RouterModule,
     NgIf,
     AsyncPipe
@@ -27,6 +30,7 @@ import { AsyncPipe, JsonPipe, NgIf } from '@angular/common';
 export class HomeScreenComponent {
 
   auth = inject(Auth);
+  matDialog = inject(MatDialog);
   isLoggedIn$: Observable<boolean> = new Observable<boolean>(undefined);
 
   constructor() {
@@ -40,4 +44,13 @@ export class HomeScreenComponent {
       });
     });
   }
+
+  openSignInDialog() {
+    const dialogRef = this.matDialog.open(SigninButtonComponent, { data: {} });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
 }
