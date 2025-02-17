@@ -1,4 +1,4 @@
-import { afterNextRender, Component, inject } from '@angular/core';
+import { afterNextRender, Component, inject, ViewChild } from '@angular/core';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -37,6 +37,8 @@ import { ContainerLayoutComponent } from '../../../shared/layouts/container-layo
   styleUrl: './dashboard-screen.component.scss'
 })
 export class DashboardScreenComponent {
+  
+  @ViewChild(ContentListComponent) contentList!: ContentListComponent;
 
   store = inject(Store<LearnState>);
   
@@ -45,10 +47,14 @@ export class DashboardScreenComponent {
     end: new FormControl<Date | null>(null),
   });
 
-  constructor() {
-    afterNextRender(() => {
-      console.log('after next render')
-    })
+  constructor() { 
+    this.range.valueChanges.subscribe(value => {
+      const { start, end } = value;
+
+      if (start && end) {
+        this.contentList.externalTrigger(start.getTime() as unknown as string, end.getTime() as unknown as string);
+      }
+    });
   }
   
 }

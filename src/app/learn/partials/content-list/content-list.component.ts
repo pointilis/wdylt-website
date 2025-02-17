@@ -64,4 +64,13 @@ export class ContentListComponent implements OnInit {
     });
   }
 
+  externalTrigger(starDate?: string, endDate?: string) {
+    this.filter = {
+      ...this.filter,
+      startDate: starDate, 
+      endDate: endDate,
+    }
+    this.store.dispatch(LearnActions.getLearns({ filter: this.filter }));
+  }
+
 }

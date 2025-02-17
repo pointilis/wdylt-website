@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { addDoc, collection, collectionData, CollectionReference, deleteDoc, doc, Firestore, getDoc, orderBy, query, Timestamp, updateDoc } from '@angular/fire/firestore';
+import { addDoc, collection, collectionData, CollectionReference, deleteDoc, doc, Firestore, getDoc, orderBy, query, Timestamp, updateDoc, where } from '@angular/fire/firestore';
 import {  Observable, of } from 'rxjs';
 import { UserService } from '../../../auth/services/user/user.service';
 import { IFilter } from '../../learn.model';
@@ -99,7 +99,18 @@ export class LearnService {
    */
   getLearns(filter: IFilter): Observable<any> {
     const c = collection(this.collectionPreference, filter.uid, 'learns')
-    const q = query(c, orderBy('createAt', 'desc'));
+    let q = query(c, orderBy('createAt', 'desc'));
+
+    if (filter.startDate && filter.endDate) {
+      q = query(
+        c,
+        where('createAt', '>=', filter.startDate),
+        where('createAt', '<=', filter.endDate),
+        orderBy('createAt', 'desc')
+      );
+
+      console.log('adada', filter);
+    }
 
     return collectionData(q, { idField: 'id' }) as Observable<any>
   }
