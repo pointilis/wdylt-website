@@ -17,6 +17,8 @@ import { provideEffects } from '@ngrx/effects';
 import { AuthReducer } from './auth/state/reducers/auth/auth.reducer';
 import { AuthEffects } from './auth/state/effects/auth/auth.effects';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { LearnReducer } from './learn/state/reducers/learn/learn.reducer';
+import { LearnEffects } from './learn/state/effects/learn/learn.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -44,9 +46,11 @@ export const appConfig: ApplicationConfig = {
     provideNativeDateAdapter(),
     provideStore({
       auth: AuthReducer,
+      learn: LearnReducer,
     }),
     provideEffects([
       AuthEffects,
+      LearnEffects,
     ])
   ],
 };

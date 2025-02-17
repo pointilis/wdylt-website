@@ -54,52 +54,31 @@ export class SigninService {
   /**
    * Get current state.
    */
-  getCurrentUser(): Observable<{ data: IUser | null, error: unknown }> {
-    this.auth.onAuthStateChanged(async (user) => {
-      // set user state
-      if (user) {
-        // success
+  getCurrentUser(): Observable<{ data: IUser | null }> {
+    return new Observable(observer => {
+      this.auth.onAuthStateChanged(async (user) => {
         const tokenResult = await user?.getIdTokenResult();
-        this.user.next({
-          data: {
-            uid: user?.uid as string,
-            email: user?.email as string,
-            displayName: user?.displayName as string,
-            photoURL: user?.photoURL as string,
-            tokenResult: {
-              authTime: tokenResult.authTime,
-              expirationTime: tokenResult.expirationTime,
-              issuedAtTime: tokenResult.issuedAtTime,
-              signInProvider: tokenResult.signInProvider,
-              token: tokenResult.token,
-            }
-          },
-          error: null,
-        });
-      } else {
-        // error
-        this.user.next({
-          data: null,
-          error: new Error('User not found'),
-        });
-      }
-    });
-
-    return new Observable((subscriber) => {
-      this.user.subscribe(({ data, error }) => {
-        if (error) {
-          const error: any = new Error('User not found.');
-          error.timestamp = Date.now();
-          subscriber.error(error);
-          subscriber.complete();
-        }
-
-        if (data) {
-          subscriber.next(this.user.value);
-          subscriber.complete();
+        if (tokenResult) {
+          observer.next({
+            data: {
+              uid: user?.uid as string,
+              email: user?.email as string,
+              displayName: user?.displayName as string,
+              photoURL: user?.photoURL as string,
+              tokenResult: {
+                authTime: tokenResult?.authTime as string,
+                expirationTime: tokenResult?.expirationTime as string,
+                issuedAtTime: tokenResult?.issuedAtTime as string,
+                signInProvider: tokenResult?.signInProvider as string,
+                token: tokenResult?.token as string,
+              }
+            },
+          });
+        } else {
+          observer.error('User not found.');
         }
       });
-    })
+    });
   }
 
   /**

@@ -1,5 +1,5 @@
 <section class="lg:h-full lg:flex flex-col px-8 py-12">
-    <div class="w-auto lg:w-4xl xl:w-3xl mx-auto">
+    <div class="w-auto md:w-3xl lg:w-4xl xl:w-3xl mx-auto">
         <div class="block w-full md:w-5/5">
             <dashboard-logo></dashboard-logo>
         </div>
@@ -14,15 +14,17 @@
             </div>
 
             <div class="ml-auto">
-                <button mat-raised-button class="flex items-center">
-                    <mat-icon fontIcon="save"></mat-icon>
-                    <span class="ml-1">Save</span>
-                </button>
+                <ng-container *ngIf="add$ | async as add">
+                    <button mat-raised-button class="flex items-center" (click)="onSave()" [disabled]="add.status === 'loading'">
+                        <mat-icon fontIcon="save"></mat-icon>
+                        <span class="ml-1">Save</span>
+                    </button>
+                </ng-container>
             </div>
         </div>
     
         <div class="block mt-5">
-            <write-ckeditor></write-ckeditor>
+            <write-ckeditor (onChange)="onChangeEditor($event)"></write-ckeditor>
         </div>
     </div>
 

@@ -1,7 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 
 @use "tailwindcss";
-@use 'ckeditor5/ckeditor5.css';
+
+/* CKEDITOR */
+@use 'ckeditor5/ckeditor5-editor.css';
+@use 'ckeditor5/ckeditor5-content.css';
 
 :root {
   --leading-normal: normal;

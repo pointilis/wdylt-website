@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { afterNextRender, afterRender, Component, ViewEncapsulation } from '@angular/core';
-import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { afterNextRender, afterRender, Component, EventEmitter, Output, ViewEncapsulation } from '@angular/core';
+import { ChangeEvent, CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { Bold, CKFinder, CKFinderUI, CKFinderUploadAdapter, ClassicEditor, EditorConfig, Essentials, ImageInsertUI, Image as CKImage, ImageResize, ImageStyle, ImageToolbar, ImageUpload, Italic, Link, MediaEmbed, Paragraph, SimpleUploadAdapter, FontColor, FontFamily, Font, FontSize, List, TodoList, TodoListUI, TodoListEditing, Underline, UnderlineEditing, UnderlineUI } from 'ckeditor5';
+import { debounceTime, Subject } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'write-ckeditor',
@@ -15,6 +17,9 @@ import { Bold, CKFinder, CKFinderUI, CKFinderUploadAdapter, ClassicEditor, Edito
 })
 export class WriteCkeditorComponent {
   
+  @Output() public onChange: EventEmitter<any> = new EventEmitter<any>;
+  private debouncer: Subject<string> = new Subject<string>();
+
   public Editor = ClassicEditor;
   public config: EditorConfig = {
     licenseKey: 'GPL', // Or 'GPL'.
@@ -69,9 +74,21 @@ export class WriteCkeditorComponent {
   }
 
   constructor() {
-    afterRender(() => {
-      
-    });
+    this.debouncer
+      .pipe(debounceTime(500), takeUntilDestroyed())
+      .subscribe(value => this.onChange.emit(value));
   }
 
+  /**
+   * Listen editor changed
+   */
+  public editorChangeHandler( { editor }: ChangeEvent ) {
+    if (editor) {
+      const data = editor.getData();
+      this.debouncer.next(data);
+    }
+  }
+  
 }
+
+

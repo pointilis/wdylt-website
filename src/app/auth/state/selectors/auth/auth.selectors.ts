@@ -6,7 +6,6 @@ export const authSelectFeature = createFeatureSelector<AuthState>(authFeatureKey
 export const user = createSelector(
     authSelectFeature,
     (state: AuthState) => {
-        console.log(state.user)
         return state.user;
     }
 );

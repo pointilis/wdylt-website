@@ -1,1 +1,17 @@
-<p>content-list works!</p>
+@if (learns$ | async; as learns) {
+    @if(learns.status == 'success') {
+        @for(item of learns.data; track item.id; let isLast=$last) {
+            <div class="mb-6">
+                @if (item.mimeType == 'text' || item.mimeType == undefined) {
+                    <content-text [content]="item" [isLast]="isLast"></content-text>
+                } @else {
+                    <content-audio [content]="item" [isLast]="isLast"></content-audio>
+                }
+            </div>
+        }
+    } @else if (learns.status == 'loading') {
+        loading
+    } @else {
+        faili
+    }
+}

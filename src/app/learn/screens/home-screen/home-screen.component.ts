@@ -9,6 +9,9 @@ import { Auth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { AsyncPipe, JsonPipe, NgIf } from '@angular/common';
 import { SigninButtonComponent } from '../../../shared/partials/signin-button/signin-button.component';
+import { Store } from '@ngrx/store';
+import { LearnState } from '../../state/reducers/learn/learn.reducer';
+import { LearnActions } from '../../state/actions/learn/learn.actions';
 
 @Component({
   selector: 'app-home-screen',
@@ -31,6 +34,7 @@ export class HomeScreenComponent {
 
   auth = inject(Auth);
   matDialog = inject(MatDialog);
+  store = inject(Store<LearnState>);
   isLoggedIn$: Observable<boolean> = new Observable<boolean>(undefined);
 
   constructor() {

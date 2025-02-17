@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { afterNextRender, Component, inject } from '@angular/core';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -9,6 +9,10 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { JsonPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DashboardLogoComponent } from '../../../shared/partials/dashboard-logo/dashboard-logo.component';
+import { LearnActions } from '../../state/actions/learn/learn.actions';
+import { Store } from '@ngrx/store';
+import { LearnState } from '../../state/reducers/learn/learn.reducer';
+import { ContentListComponent } from '../../partials/content-list/content-list.component';
 
 @Component({
   selector: 'app-dashboard-screen',
@@ -20,6 +24,7 @@ import { DashboardLogoComponent } from '../../../shared/partials/dashboard-logo/
     MatDatepickerModule,
     MatFormFieldModule,
     MyAccountButtonComponent,
+    ContentListComponent,
     DashboardLogoComponent,
     FormsModule,
     ReactiveFormsModule,
@@ -31,9 +36,17 @@ import { DashboardLogoComponent } from '../../../shared/partials/dashboard-logo/
 })
 export class DashboardScreenComponent {
 
+  store = inject(Store<LearnState>);
+  
   readonly range = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   });
+
+  constructor() {
+    afterNextRender(() => {
+      console.log('after next render')
+    })
+  }
   
 }
