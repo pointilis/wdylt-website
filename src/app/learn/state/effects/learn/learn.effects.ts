@@ -3,14 +3,22 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { LearnActions } from '../../actions/learn/learn.actions';
 import { catchError, map, mergeMap, of } from 'rxjs';
 import { LearnService } from '../../../services/learn/learn.service';
-
-
+import {
+  MatSnackBar,
+  MatSnackBarAction,
+  MatSnackBarActions,
+  MatSnackBarLabel,
+  MatSnackBarRef,
+} from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class LearnEffects {
 
   private learnService = inject(LearnService);
-  
+  private snackBar = inject(MatSnackBar);
+  private router = inject(Router);
+
   constructor(private actions$: Actions) {}
 
   // ...
@@ -33,6 +41,8 @@ export class LearnEffects {
       ofType(LearnActions.addLearnSuccess),
       map(({ data }) => {
         console.log(data);
+        this.snackBar.open('Successfully saved', 'Dismiss', { duration: 3000 });
+        this.router.navigate(['/dashboard'], { replaceUrl: true });
       })
     ), { dispatch: false }
   )
@@ -53,10 +63,10 @@ export class LearnEffects {
   getLearns$ = createEffect(() =>
     this.actions$.pipe(
       ofType(LearnActions.getLearns),
-      mergeMap(() => {
-        return this.learnService.getLearns().pipe(
-          map(res => LearnActions.getLearnsSuccess({ data: res })),
-          catchError(error => of(LearnActions.getLearnsFailure({ error: error })))
+      mergeMap(({ filter }) => {
+        return this.learnService.getLearns(filter).pipe(
+          map(res => LearnActions.getLearnsSuccess({ data: res, filter: filter })),
+          catchError(error => of(LearnActions.getLearnsFailure({ error: error, filter: filter })))
         )
       })
     )

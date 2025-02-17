@@ -1,7 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { addDoc, collection, collectionData, CollectionReference, Firestore, orderBy, query, Timestamp } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import {  Observable, of } from 'rxjs';
 import { UserService } from '../../../auth/services/user/user.service';
+import { IFilter } from '../../learn.model';
 
 export const MIME_TYPE = ['text', 'audio'];
 
@@ -15,7 +16,7 @@ export class LearnService {
   collectionPreference!: CollectionReference;
 
   constructor() { 
-    this.collectionPreference = collection(this.firestore, 'learns');
+    this.collectionPreference = collection(this.firestore, 'users');
   }
 
   /**
@@ -23,13 +24,13 @@ export class LearnService {
    * 
    * @param mimeType string valid value 'text' or 'audio'
    */
-  public addLearn(data: Object, mimeType: string = 'text'): Observable<any> {
+  public addLearn(data: any, mimeType: string = 'text'): Observable<any> {
     if (!MIME_TYPE.includes(mimeType)) {
       return of(Error('Invalid mime type.'));
     }
 
     return new Observable((observer) => {
-      const createAt = Timestamp.now();
+      const createAt = Timestamp.now().toMillis();
       
       this.userService.getUser().then(user => {
         const uid = user.uid;
@@ -41,11 +42,12 @@ export class LearnService {
           updateAt: createAt,
         }
 
-        addDoc(this.collectionPreference, data)
-          .then(doc => {
+        // users/{uid}/learns/{id}
+        addDoc(collection(this.collectionPreference, uid, "learns"), data)
+          .then((res) => {
             data = {
               ...data,
-              id: doc.id,
+              id: res.id,
             }
             observer.next(data)
           })
@@ -57,8 +59,10 @@ export class LearnService {
   /**
    * Load learns
    */
-  getLearns(): Observable<any> {
-    const q = query(this.collectionPreference, orderBy('createAt', 'desc'));
+  getLearns(filter: IFilter): Observable<any> {
+    const c = collection(this.collectionPreference, filter.uid, 'learns')
+    const q = query(c, orderBy('createAt', 'desc'));
+
     return collectionData(q, { idField: 'id' }) as Observable<any>
   }
 

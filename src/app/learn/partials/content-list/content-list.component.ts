@@ -7,6 +7,9 @@ import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { ContentTextComponent } from '../content-text/content-text.component';
 import { ContentAudioComponent } from '../content-audio/content-audio.component';
+import { UserService } from '../../../auth/services/user/user.service';
+import { MatProgressSpinner, MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { IFilter } from '../../learn.model';
 
 @Component({
   selector: 'content-list',
@@ -14,6 +17,8 @@ import { ContentAudioComponent } from '../content-audio/content-audio.component'
     ContentTextComponent,
     ContentAudioComponent,
     AsyncPipe,
+    MatProgressSpinnerModule,
+    MatProgressSpinner,
   ],
   templateUrl: './content-list.component.html',
   styleUrl: './content-list.component.scss'
@@ -21,14 +26,25 @@ import { ContentAudioComponent } from '../content-audio/content-audio.component'
 export class ContentListComponent implements OnInit {
 
   store = inject(Store<LearnState>);
+  userService = inject(UserService);
   learns$!: Observable<{ data: any, status: string }>;
+  filter!: IFilter;
   
   constructor() { 
     this.learns$ = this.store.pipe(select(LearnSelecttors.list));
   }
 
   ngOnInit() {
-    this.store.dispatch(LearnActions.getLearns());
+    this.getLearns();
+  }
+
+  async getLearns() {
+    const user = await this.userService.getUser();
+    this.filter = {
+      ...this.filter,
+      uid: user.uid,
+    }
+    this.store.dispatch(LearnActions.getLearns({ filter: this.filter }));
   }
 
 }

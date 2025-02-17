@@ -9,9 +9,15 @@
                 }
             </div>
         }
+
+        @if (learns.data.length <= 0) {
+            <div class="bg-yellow-100 text-center text-yellow-700 shadow-sm py-3 px-5 rounded-lg">No data on this time.</div>
+        }
     } @else if (learns.status == 'loading') {
-        loading
+        <div class="w-12 h-12 mx-auto flex items-center justify-center">
+            <mat-spinner diameter="30"></mat-spinner>
+        </div>
     } @else {
-        faili
+        <div class="bg-rose-100 text-center text-rose-700 shadow-sm py-3 px-5 rounded-lg">Something wrong please refresh the page.</div>
     }
 }
