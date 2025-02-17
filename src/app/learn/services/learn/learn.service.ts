@@ -1,8 +1,9 @@
 import { inject, Injectable } from '@angular/core';
-import { addDoc, collection, collectionData, CollectionReference, Firestore, orderBy, query, Timestamp } from '@angular/fire/firestore';
+import { addDoc, collection, collectionData, CollectionReference, deleteDoc, doc, Firestore, getDoc, orderBy, query, Timestamp, updateDoc } from '@angular/fire/firestore';
 import {  Observable, of } from 'rxjs';
 import { UserService } from '../../../auth/services/user/user.service';
 import { IFilter } from '../../learn.model';
+import { get, getDatabase, onValue, ref } from '@angular/fire/database';
 
 export const MIME_TYPE = ['text', 'audio'];
 
@@ -57,6 +58,43 @@ export class LearnService {
   }
 
   /**
+   * Update learn
+   */
+  public updateLearn(docId: string, uid: string, data: any): Observable<any> {
+    const updateAt = Timestamp.now().toMillis();
+    data = {
+      ...data,
+      updateAt: updateAt,
+    }
+
+    return new Observable(observer => {
+      updateDoc(doc(this.collectionPreference, uid, 'learns/' + docId), data)
+        .then(value => {
+          console.log(value);
+          observer.next(data);
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
+  }
+
+  /**
+   * Delete learn
+   */
+  public deleteLearn(docId: string, uid: string): Observable<any> {
+    return new Observable(observer => {
+      deleteDoc(doc(this.collectionPreference, uid, 'learns/' + docId))
+        .then(() => {
+          observer.next('Deleted!');
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
+  }
+
+  /**
    * Load learns
    */
   getLearns(filter: IFilter): Observable<any> {
@@ -64,6 +102,24 @@ export class LearnService {
     const q = query(c, orderBy('createAt', 'desc'));
 
     return collectionData(q, { idField: 'id' }) as Observable<any>
+  }
+
+  /**
+   * Retrieve single learn
+   * 
+   * @param docId string
+   * @param uid string
+   */
+  getLearn(docId: string, uid: string): Observable<any> {
+    return new Observable(observer => {
+      getDoc(doc(this.collectionPreference, uid, 'learns/' + docId))
+        .then(value => {
+          observer.next(value.data());
+        })
+        .catch(error => {
+          observer.error(error);
+        })
+      });
   }
 
 }

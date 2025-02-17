@@ -9,12 +9,12 @@
             <div class="newsreader-font text-xl ck-content" [innerHTML]="presentHTMLContent(this.content.content)"></div>
         </mat-card-content>
         <mat-card-actions>
-            <button mat-button class="flex items-center">
+            <button mat-button class="flex items-center" (click)="onDeleteHandler(content)">
                 <mat-icon fontIcon="delete"></mat-icon>
                 <span>Delete</span>
             </button>
 
-            <button mat-button class="flex items-center">
+            <button mat-button class="flex items-center" [routerLink]="['/dashboard/write', content.id]">
                 <mat-icon fontIcon="edit_note"></mat-icon>
                 <span>Edit</span>
             </button>

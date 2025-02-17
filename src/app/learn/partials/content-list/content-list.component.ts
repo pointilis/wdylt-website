@@ -10,6 +10,8 @@ import { ContentAudioComponent } from '../content-audio/content-audio.component'
 import { UserService } from '../../../auth/services/user/user.service';
 import { MatProgressSpinner, MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { IFilter } from '../../learn.model';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { DeleteConfirmationComponent } from '../../../shared/partials/delete-confirmation/delete-confirmation.component';
 
 @Component({
   selector: 'content-list',
@@ -19,6 +21,7 @@ import { IFilter } from '../../learn.model';
     AsyncPipe,
     MatProgressSpinnerModule,
     MatProgressSpinner,
+    MatDialogModule,
   ],
   templateUrl: './content-list.component.html',
   styleUrl: './content-list.component.scss'
@@ -27,6 +30,7 @@ export class ContentListComponent implements OnInit {
 
   store = inject(Store<LearnState>);
   userService = inject(UserService);
+  matDialog = inject(MatDialog);
   learns$!: Observable<{ data: any, status: string }>;
   filter!: IFilter;
   
@@ -45,6 +49,19 @@ export class ContentListComponent implements OnInit {
       uid: user.uid,
     }
     this.store.dispatch(LearnActions.getLearns({ filter: this.filter }));
+  }
+
+  async onDeleteHandler(content: any) {
+    const user = await this.userService.getUser();
+    const dialogRef = this.matDialog.open(DeleteConfirmationComponent, {
+      data: content,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'confirm') {
+        this.store.dispatch(LearnActions.deleteLearn({ docId: content.id, uid: user.uid }))
+      }
+    });
   }
 
 }

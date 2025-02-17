@@ -20,6 +20,7 @@ export class WriteCkeditorComponent {
   @Output() public onChange: EventEmitter<any> = new EventEmitter<any>;
   private debouncer: Subject<string> = new Subject<string>();
 
+  public data: any;
   public Editor = ClassicEditor;
   public config: EditorConfig = {
     licenseKey: 'GPL', // Or 'GPL'.
@@ -87,6 +88,13 @@ export class WriteCkeditorComponent {
       const data = editor.getData();
       this.debouncer.next(data);
     }
+  }
+
+  /**
+   * Trigger editor from outside
+   */
+  public setContent(content: any) {
+    this.data = content;
   }
   
 }

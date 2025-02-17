@@ -21,7 +21,16 @@ const routes: Routes = [
       },
       {
         path: 'write',
-        component: WriteScreenComponent,
+        children: [
+          {
+            path: '',
+            component: WriteScreenComponent,
+          },
+          {
+            path: ':docId',
+            component: WriteScreenComponent,
+          }
+        ]
       },
       {
         path: 'record',

@@ -16,3 +16,10 @@ export const list = createSelector(
         return state.list;
     }
 );
+
+export const retrieve = createSelector(
+    learnSelectFeature,
+    (state: LearnState) => {
+        return state.retrieve;
+    }
+);

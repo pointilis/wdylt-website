@@ -13,6 +13,7 @@ import { LearnActions } from '../../state/actions/learn/learn.actions';
 import { Store } from '@ngrx/store';
 import { LearnState } from '../../state/reducers/learn/learn.reducer';
 import { ContentListComponent } from '../../partials/content-list/content-list.component';
+import { ContainerLayoutComponent } from '../../../shared/layouts/container-layout/container-layout.component';
 
 @Component({
   selector: 'app-dashboard-screen',
@@ -26,6 +27,7 @@ import { ContentListComponent } from '../../partials/content-list/content-list.c
     MyAccountButtonComponent,
     ContentListComponent,
     DashboardLogoComponent,
+    ContainerLayoutComponent,
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
