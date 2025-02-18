@@ -3,7 +3,8 @@ import { addDoc, collection, collectionData, CollectionReference, deleteDoc, doc
 import {  Observable, of } from 'rxjs';
 import { UserService } from '../../../auth/services/user/user.service';
 import { IFilter } from '../../learn.model';
-import { get, getDatabase, onValue, ref } from '@angular/fire/database';
+import { getDownloadURL, getStorage, ref, uploadBytes } from '@angular/fire/storage';
+import { getAuth } from '@angular/fire/auth';
 
 export const MIME_TYPE = ['text', 'audio'];
 
@@ -25,8 +26,8 @@ export class LearnService {
    * 
    * @param mimeType string valid value 'text' or 'audio'
    */
-  public addLearn(data: any, mimeType: string = 'text'): Observable<any> {
-    if (!MIME_TYPE.includes(mimeType)) {
+  public addLearn(data: any): Observable<any> {
+    if (!MIME_TYPE.includes(data.mimeType)) {
       return of(Error('Invalid mime type.'));
     }
 
@@ -38,7 +39,6 @@ export class LearnService {
         data = {
           ...data,
           uid: uid,
-          mimeType: mimeType,
           createAt: createAt,
           updateAt: createAt,
         }
@@ -108,8 +108,6 @@ export class LearnService {
         where('createAt', '<=', filter.endDate),
         orderBy('createAt', 'desc')
       );
-
-      console.log('adada', filter);
     }
 
     return collectionData(q, { idField: 'id' }) as Observable<any>
@@ -131,6 +129,30 @@ export class LearnService {
           observer.error(error);
         })
       });
+  }
+
+  /**
+   * Upload audio
+   * 
+   * @param mimeType string valid value 'text' or 'audio'
+   */
+  public uploadAudio(blob: Blob): Observable<any> {
+    return new Observable((observer) => {
+      const storage = getStorage();
+      const auth = getAuth();
+      const timestamp = Timestamp.now().toMillis();
+      const storageRef = ref(storage, `${auth.currentUser?.uid}/learns/audios/${timestamp}-audio.wav`);
+
+      uploadBytes(storageRef, blob)
+        .then(async (snapshot) => {
+          console.log('Uploaded a blob or file!');
+          const downloadURL = await getDownloadURL(snapshot.ref);
+          observer.next(downloadURL);
+        })
+        .catch(error => {
+          observer.error(error);
+        });
+    });
   }
 
 }

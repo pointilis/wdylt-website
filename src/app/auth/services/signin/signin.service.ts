@@ -23,11 +23,11 @@ export class SigninService {
     const provider = new GoogleAuthProvider();
     // Label: See and download your contacts
     // Desc: We want to see your name for internal used only, not shared to others
-    provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+    // provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
     // Label: See, edit, create, and delete only the specific Google Drive files you use with this app
     // Desc: This application have feature to record voice note, all of voice file will saved to your private
     // Google drive account and not shared to anyone
-    provider.addScope('https://www.googleapis.com/auth/drive.file');
+    // provider.addScope('https://www.googleapis.com/auth/drive.file');
     provider.setCustomParameters({
       'allow_signup': 'true',
     });

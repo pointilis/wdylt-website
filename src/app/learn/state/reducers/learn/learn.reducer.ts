@@ -19,6 +19,11 @@ export interface LearnState {
     data: unknown
     error: unknown
     status: string
+  },
+  uploadAudio: {
+    data: unknown
+    error: unknown
+    status: string
   }
 }
 
@@ -34,6 +39,11 @@ export const initialState: LearnState = {
     status: Statuses.IDLE,
   },
   retrieve: {
+    data: null,
+    error: null,
+    status: Statuses.IDLE,
+  },
+  uploadAudio: {
     data: null,
     error: null,
     status: Statuses.IDLE,
@@ -190,6 +200,41 @@ export const LearnReducer = createReducer(
       ...state,
       retrieve: {
         ...state.retrieve,
+        error: error,
+        status: Statuses.FAILURE,
+      }
+    }
+  }),
+
+
+  // ...
+  // UPLOAD AUDIO
+  // ...
+  on(LearnActions.uploadAudio, (state) => {
+    return {
+      ...state,
+      uploadAudio: {
+        ...state.uploadAudio,
+        status: Statuses.LOADING,
+        error: null,
+      }
+    }
+  }),
+  on(LearnActions.uploadAudioSuccess, (state, { data }) => {
+    return {
+      ...state,
+      uploadAudio: {
+        ...state.uploadAudio,
+        data: data,
+        status: Statuses.SUCCESS,
+      },
+    }
+  }),
+  on(LearnActions.uploadAudioFailure, (state, { error }) => {
+    return {
+      ...state,
+      uploadAudio: {
+        ...state.uploadAudio,
         error: error,
         status: Statuses.FAILURE,
       }

@@ -196,4 +196,38 @@ export class LearnEffects {
     ), { dispatch: false }
   )
 
+
+  // ...
+  // UPLOAD AUDIO
+  // ...
+  uploadAudio$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LearnActions.uploadAudio),
+      mergeMap(({ blob }) => {
+        return this.learnService.uploadAudio(blob).pipe(
+          map(res => LearnActions.uploadAudioSuccess({ data: res })),
+          catchError(error => of(LearnActions.uploadAudioFailure({ error: error })))
+        )
+      })
+    )
+  )
+
+  uploadAudioSuccess$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LearnActions.uploadAudioSuccess),
+      map(({ data }) => {
+        console.log(data);
+      })
+    ), { dispatch: false }
+  )
+
+  uploadAudioFailure$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(LearnActions.uploadAudioFailure),
+      map(({ error }) => {
+        console.log(error);
+      })
+    ), { dispatch: false }
+  )
+
 }

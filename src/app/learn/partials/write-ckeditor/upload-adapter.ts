@@ -34,7 +34,7 @@ export class XAdapter implements UploadAdapter {
 
                 if (file) {
                     const timestamp = Timestamp.now().toMillis();
-                    const storageRef = ref(storage, `${auth.currentUser?.uid}/learns/${timestamp}-${file.name}`);
+                    const storageRef = ref(storage, `${auth.currentUser?.uid}/learns/images/${timestamp}-${file.name}`);
                     uploadBytes(storageRef, file).then(async (snapshot) => {
                         console.log('Uploaded a blob or file!');
                         const downloadURL = await getDownloadURL(snapshot.ref);

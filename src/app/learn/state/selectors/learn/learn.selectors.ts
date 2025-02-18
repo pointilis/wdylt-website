@@ -23,3 +23,10 @@ export const retrieve = createSelector(
         return state.retrieve;
     }
 );
+
+export const uploadAudio = createSelector(
+    learnSelectFeature,
+    (state: LearnState) => {
+        return state.uploadAudio;
+    }
+);

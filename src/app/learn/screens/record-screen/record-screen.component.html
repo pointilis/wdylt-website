@@ -15,15 +15,10 @@
         </div>
     
         <div class="block mt-8">
-            <div class="block md:flex">
-                <div>
-                    <audio-recorder></audio-recorder>
-                </div>
-
-                <div class="mt-5 md:mt-0 md:pl-6 text-lg md:text-3xl newsreader-font">
-                    Before you start recording, make sure the current location where you are sitting supports it.
-                </div>
+            <div class="mb-5 text-xl md:text-3xl newsreader-font">
+                Before you start recording, make sure the current location where you are sitting supports it.
             </div>
+            <audio-recorder (onRecordEnd)="onRecordEnd($event)"></audio-recorder>
         </div>
     </div>
 

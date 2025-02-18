@@ -23,5 +23,9 @@ export const LearnActions = createActionGroup({
     'Get Learn': props<{ docId: string, uid: string }>(),
     'Get Learn Success': props<{ data: any }>(),
     'Get Learn Failure': props<{ error: unknown }>(),
+
+    'Upload Audio': props<{ blob: Blob }>(),
+    'Upload Audio Success': props<{ data: any }>(),
+    'Upload Audio Failure': props<{ error: unknown }>(),
   }
 });

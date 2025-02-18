@@ -1,9 +1,16 @@
-import { JsonPipe, NgClass, NgIf, NgStyle } from '@angular/common';
-import { Component, signal, WritableSignal } from '@angular/core';
+import { AsyncPipe, JsonPipe, NgClass, NgIf, NgStyle } from '@angular/common';
+import { Component, EventEmitter, inject, Output, signal, WritableSignal } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatFormField } from '@angular/material/form-field';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import WafeSurfer from 'wavesurfer.js';
 import RecordPlugin from 'wavesurfer.js/dist/plugins/record.esm.js'
+import { LearnState } from '../../state/reducers/learn/learn.reducer';
+import * as LearnSelectors from '../../state/selectors/learn/learn.selectors';
 
 export interface Duration {
   minutes: string
@@ -20,12 +27,21 @@ export interface Duration {
     NgIf,
     NgClass,
     NgStyle,
-    JsonPipe,
+    MatFormField,
+    MatInputModule,
+    FormsModule,
+    ReactiveFormsModule,
+    AsyncPipe,
   ],
   templateUrl: './audio-recorder.component.html',
   styleUrl: './audio-recorder.component.scss'
 })
 export class AudioRecorderComponent {
+
+  store = inject(Store<LearnState>);
+  
+  @Output('onRecordEnd') 
+  onRecordEnd: EventEmitter<any> = new EventEmitter<any>;
 
   wafesurver!: WafeSurfer;
   record!: RecordPlugin;
@@ -34,6 +50,12 @@ export class AudioRecorderComponent {
   duration: WritableSignal<Duration> = signal<Duration>({ minutes: '00', seconds: '00'});
   isPaused: WritableSignal<boolean> = signal<boolean>(false);
   isRecording: WritableSignal<boolean> = signal<boolean>(false);
+  content: string = '';
+  uploadAudio$!: Observable<{ data: any, status: string }>;
+
+  constructor() {
+    this.uploadAudio$ = this.store.pipe(select(LearnSelectors.uploadAudio));
+  }
 
   ngAfterViewInit() {
     this.initializeWafeSurfer();
@@ -71,6 +93,7 @@ export class AudioRecorderComponent {
     // On record end
     this.record.on('record-end', (blob) => {
       console.log('recorderd data', blob);
+      this.onRecordEnd.emit({ blob: blob, content: this.content });
     });
 
     // Record on progress
@@ -138,6 +161,33 @@ export class AudioRecorderComponent {
 
     this.record.pauseRecording();
     this.isPaused.set(true);
+  }
+
+  /**
+   * Reset
+   */
+  onResetHandler() {
+    if (this.record.isRecording()) {
+      this.record.stopRecording();
+
+      setTimeout(() => {
+        this.duration.update((value: Duration) => {
+          return {
+            minutes: '00',
+            seconds: '00',
+          }
+        });
+      }, 10);
+
+      this.isRecording.set(false);
+    }
+  }
+
+  /**
+   * Stop and save
+   */
+  stopAndSave() {
+    this.onStartRecordHandler();
   }
 
 }
