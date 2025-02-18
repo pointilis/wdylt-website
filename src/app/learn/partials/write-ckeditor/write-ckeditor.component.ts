@@ -1,7 +1,41 @@
 import { CommonModule } from '@angular/common';
-import { afterNextRender, afterRender, Component, EventEmitter, inject, OnInit, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { ChangeEvent, CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { Bold, CKFinder, CKFinderUI, CKFinderUploadAdapter, ClassicEditor, EditorConfig, Essentials, ImageInsertUI, Image as CKImage, ImageResize, ImageStyle, ImageToolbar, ImageUpload, Italic, Link, MediaEmbed, Paragraph, SimpleUploadAdapter, FontColor, FontFamily, Font, FontSize, List, TodoList, TodoListUI, TodoListEditing, Underline, UnderlineEditing, UnderlineUI, UploadAdapter, UploadResponse, FileLoader, FileRepository, Base64UploadAdapter, Editor } from 'ckeditor5';
+import { 
+  Bold, 
+  CKFinder, 
+  CKFinderUI, 
+  CKFinderUploadAdapter, 
+  ClassicEditor, 
+  EditorConfig, 
+  Essentials, 
+  ImageInsertUI, 
+  Image as CKImage, 
+  ImageUpload, 
+  ImageResizeEditing, 
+  ImageResizeHandles,
+  Italic, 
+  Link, 
+  Paragraph, 
+  FontColor, 
+  FontFamily, 
+  Font, 
+  FontSize, 
+  List, 
+  TodoList, 
+  TodoListUI, 
+  TodoListEditing, 
+  Underline, 
+  UnderlineEditing, 
+  UnderlineUI, 
+  Editor,
+  ImageStyle,
+  ImageStyleEditing,
+  ImageStyleUI,
+  ImageEditing,
+  ImageStyleCommand,
+  ImageToolbar,
+} from 'ckeditor5';
 import { debounceTime, Subject } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserService } from '../../../auth/services/user/user.service';
@@ -57,7 +91,14 @@ export class WriteCkeditorComponent implements OnInit {
         CKFinderUI,
         CKFinderUploadAdapter,
         ImageUpload,
+        ImageStyle,
+        ImageStyleUI,
+        ImageStyleEditing,
+        ImageEditing,
         ImageInsertUI,
+        ImageResizeEditing,
+        ImageResizeHandles,
+        ImageToolbar,
         List,
         TodoList,
         TodoListUI,
@@ -74,6 +115,21 @@ export class WriteCkeditorComponent implements OnInit {
           'numberedList', 'bulletedList', 'todoList',
           'imageUpload'
         ],
+      },
+      image: {
+        toolbar: [
+          'imageStyle:inline',
+          'imageStyle:block',
+          'imageStyle:side',
+          'imageStyle:alignLeft',
+          'imageStyle:alignRight',
+          'imageStyle:alignCenter',
+        ],
+        insert: {
+          // If this setting is omitted, the editor defaults to 'block'.
+          // See explanation below.
+          type: 'auto'
+        }
       },
       simpleUpload: {
         // The URL that the images are uploaded to.
