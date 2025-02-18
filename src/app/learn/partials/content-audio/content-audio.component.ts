@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgIf } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardModule } from '@angular/material/card';
@@ -16,6 +16,7 @@ import { RouterModule } from '@angular/router';
     MatIcon,
     RouterModule,
     DatePipe,
+    NgIf,
   ],
   templateUrl: './content-audio.component.html',
   styleUrl: './content-audio.component.scss'

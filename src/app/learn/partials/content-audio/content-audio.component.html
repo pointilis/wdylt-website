@@ -6,7 +6,7 @@
             </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-            <div class="newsreader-font font-medium text-xl ck-content" [innerHTML]="presentHTMLContent(this.content.content)"></div>
+            <div *ngIf="this.content.content" class="newsreader-font font-medium text-xl ck-content" [innerHTML]="presentHTMLContent(this.content.content)"></div>
             @if (this.content.fileURL) {
                 <div class="mt-4">
                     <audio controls class="border border-neutral-300 rounded-full">

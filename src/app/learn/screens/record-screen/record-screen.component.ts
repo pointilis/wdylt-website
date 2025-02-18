@@ -111,18 +111,16 @@ export class RecordScreenComponent {
   }
 
   onSave(): void {
-    if (this.content && this.content != '') {
-      if (this.docId) {
-        this.updateLearn();
-      } else {
-        this.store.dispatch(LearnActions.addLearn({ 
-          data: {
-            content: this.content,
-            mimeType: 'audio',
-            fileURL: this.fileURL,
-          }
-        }));
-      }
+    if (this.docId) {
+      this.updateLearn();
+    } else {
+      this.store.dispatch(LearnActions.addLearn({ 
+        data: {
+          content: this.content,
+          mimeType: 'audio',
+          fileURL: this.fileURL,
+        }
+      }));
     }
   }
 
